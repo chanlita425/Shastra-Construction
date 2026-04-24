@@ -259,19 +259,29 @@
                         ],
                     ];
                 @endphp
+                
                 <div
-                    class="relative z-20 mx-auto grid max-w-[58rem] place-items-center gap-6 px-6 py-8 text-center sm:grid-cols-3 sm:gap-8 sm:py-12 lg:min-h-[24.3125rem] lg:content-center lg:px-16 lg:py-0 xl:px-0">
+                class="relative z-20 mx-auto flex w-full max-w-[58rem] items-center justify-center gap-3 px-6 py-6 text-center sm:gap-4 sm:px-6 min-h-[15rem] lg:h-[24.3125rem] lg:gap-6 lg:px-16">
+
                     @foreach ($stats as $item)
-                        <div class="flex min-h-[5.5rem] flex-col items-center justify-start transition duration-700 ease-out will-change-transform"
+                        <div
+                            class="flex flex-1 min-w-0  flex-col items-center justify-center transition duration-700 ease-out will-change-transform"
                             style="transition-delay: {{ 80 + $loop->index * 90 }}ms;"
                             :class="statsVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'">
-                           <p
-                                class="font-display text-[2.35rem] leading-none font-semibold text-[#ff8800]"
+
+                            <p
+                                class="font-display font-semibold leading-none text-[#ff8800]
+                                text-[1.3rem] sm:text-[1.6rem] md:text-[1.8rem] lg:text-[3rem]"
                                 x-text="stats[{{ $loop->index }}].display"
                                 x-init="$el.innerText = '{{ number_format($item['value']) }}+'">
                             </p>
-                            <p class="mt-2 text-center text-[0.95rem] leading-none text-white/72 sm:text-base">
-                                {{ $item['label'] ?? '' }}</p>
+
+                            <p
+                                class="mt-1 text-center leading-tight text-white/72
+                                text-[2px] sm:text-[0.75rem] md:text-[0.85rem] lg:text-[1rem]">
+                                {{ $item['label'] ?? '' }}
+                            </p>
+
                         </div>
                     @endforeach
                 </div>

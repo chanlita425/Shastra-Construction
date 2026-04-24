@@ -23,7 +23,7 @@ class BannerController extends Controller
     {
         $request->validate([
             'name'  => 'nullable|string',
-            'media' => 'nullable|file|mimes:jpg,jpeg,png,gif,svg,mp4,webm,mov|max:204800',
+            'media' => 'nullable|file|mimes:jpg,jpeg,png,gif,svg,mp4,webm,mov|max:512000',
         ]);
 
         $banner->name = $request->name;
