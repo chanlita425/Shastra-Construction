@@ -182,14 +182,13 @@
                 @endif
 
                 <div
-                    class="relative z-10 flex min-h-[24rem] items-center px-4 py-6 sm:min-h-[28rem] sm:px-8 sm:py-10 lg:min-h-[36rem] lg:px-16 lg:py-16 xl:px-[9.9375rem]">
-                    <div class="relative w-full max-w-[22rem] sm:max-w-[57rem] lg:max-w-[56rem]">
+                    class="relative z-10 flex min-h-[24rem] items-center px-4 py-16 sm:min-h-[28rem] sm:px-8 sm:py-10 lg:min-h-[36rem] lg:px-16 lg:py-16 xl:px-[9.9375rem]">
+                    <div class="relative w-full max-w-[22rem] sm:max-w-[57rem] lg:max-w-[56rem] p-16 ">
                         <div class="absolute left-0 top-0 h-16 w-2 bg-[#ff8800] sm:h-28 sm:w-2.5 lg:h-28 lg:w-2.5"></div>
 
                         <div class="ml-2 bg-[rgba(18,18,18,0.34)] px-4 py-5 shadow-[0_18px_40px_rgba(0,0,0,0.2)] backdrop-blur-[1.5px] sm:ml-2.5 sm:px-8 sm:py-8 lg:px-[3.25rem] lg:py-[2.9rem]"
                             data-aos="fade-up" data-aos-duration="820">
-                            <p
-                                class="text-[0.74rem] font-normal uppercase tracking-[0.3em] text-[#ff9808] sm:text-[0.95rem] lg:text-[1rem] lg:tracking-[0.4em]">
+                            <p class="text-[0.72rem] sm:text-[0.8rem] md:text-[0.9rem] lg:text-[0.95rem] xl:text-[1rem] font-normal uppercase tracking-[0.3em] lg:tracking-[0.4em] text-[#ff9808]">
                                 {{ $site['hero']['eyebrow'] }}
                             </p>
 
@@ -219,6 +218,7 @@
                         </div>
                     </div>
                 </div>
+                
             </div>
 
             {{-- Stats --}}
@@ -259,7 +259,7 @@
                         ],
                     ];
                 @endphp
-                
+
                 <div
                 class="relative z-20 mx-auto flex w-full max-w-[58rem] items-center justify-center gap-3 px-6 py-6 text-center sm:gap-4 sm:px-6 min-h-[15rem] lg:h-[24.3125rem] lg:gap-6 lg:px-16">
 
@@ -311,3 +311,20 @@
         'isStandalone' => true,
     ])
 @endsection
+{{-- 
+<div
+                    class="relative z-20 mx-auto grid max-w-[58rem] place-items-center gap-6 px-6 py-8 text-center sm:grid-cols-3 sm:gap-8 sm:py-12 lg:min-h-[24.3125rem] lg:content-center lg:px-16 lg:py-0 xl:px-0">
+                    @foreach ($stats as $item)
+                        <div class="flex min-h-[5.5rem] flex-col items-center justify-start transition duration-700 ease-out will-change-transform"
+                            style="transition-delay: {{ 80 + $loop->index * 90 }}ms;"
+                            :class="statsVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'">
+                           <p
+                                class="font-display text-[2.35rem] leading-none font-semibold text-[#ff8800]"
+                                x-text="stats[{{ $loop->index }}].display"
+                                x-init="$el.innerText = '{{ number_format($item['value']) }}+'">
+                            </p>
+                            <p class="mt-2 text-center text-[0.95rem] leading-none text-white/72 sm:text-base">
+                                {{ $item['label'] ?? '' }}</p>
+                        </div>
+                    @endforeach
+                </div> --}}

@@ -48,6 +48,8 @@
 @endphp
 
 <style>
+html { scroll-behavior: smooth; }
+
 /* ═══════════════════════════════════════════════════════
    CARD BASE
 ═══════════════════════════════════════════════════════ */
@@ -123,7 +125,7 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
     opacity: 0;
-    animation: storyFadeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: storyFadeIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     cursor: grab;
     user-select: none;
     /* FIX: prevent any overflow leaking outside the element */
@@ -150,7 +152,7 @@
     position: relative;
     border-radius: 0.75rem;
     opacity: 0;
-    animation: leadIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.04s forwards;
+    animation: leadIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) 0.02s forwards;
     pointer-events: none;
 }
 .project-story-view:not(.is-dragging) .project-story-panel--lead { pointer-events: auto; }
@@ -158,15 +160,15 @@
     from { opacity: 0; transform: scale(0.985) translateY(6px); }
     to   { opacity: 1; transform: scale(1) translateY(0); }
 }
+.project-story-panel--lead {
+    cursor: zoom-in;
+}
 .project-story-panel--lead img,
 .project-story-panel--lead video {
     width: 100%; height: 100%; object-fit: cover; display: block;
-    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
     pointer-events: none;
     -webkit-user-drag: none;
 }
-.project-story-panel--lead:hover img,
-.project-story-panel--lead:hover video { transform: scale(1.04); }
 
 /* ── Details panel ── */
 .project-story-panel--details {
@@ -177,7 +179,7 @@
     background: #faf7f2;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     padding: 2.75rem 2.5rem 2.75rem 2.25rem;
     overflow-y: auto;
     overflow-x: hidden;
@@ -189,7 +191,7 @@
     box-sizing: border-box;
     border-radius: 0.75rem;
     opacity: 0;
-    animation: detailsIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.18s forwards;
+    animation: detailsIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards;
     cursor: default;
     pointer-events: auto !important;
 }
@@ -220,13 +222,13 @@
     position: relative;
     border-radius: 0.75rem;
     opacity: 0;
-    animation: panelIn 0.48s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: panelIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
-.project-story-panel:nth-child(3) { animation-delay: 0.20s; }
-.project-story-panel:nth-child(4) { animation-delay: 0.26s; }
-.project-story-panel:nth-child(5) { animation-delay: 0.32s; }
-.project-story-panel:nth-child(6) { animation-delay: 0.38s; }
-.project-story-panel:nth-child(7) { animation-delay: 0.44s; }
+.project-story-panel:nth-child(3) { animation-delay: 0.10s; }
+.project-story-panel:nth-child(4) { animation-delay: 0.14s; }
+.project-story-panel:nth-child(5) { animation-delay: 0.18s; }
+.project-story-panel:nth-child(6) { animation-delay: 0.22s; }
+.project-story-panel:nth-child(7) { animation-delay: 0.26s; }
 @keyframes panelIn {
     from { opacity: 0; transform: translateX(22px); }
     to   { opacity: 1; transform: translateX(0); }
@@ -317,6 +319,45 @@
     .project-story-panel--details .swipe-hint { display: flex; }
 }
 
+/* ── lg / xl: story-view height matches the collapsed thumbnail (aspect-ratio 16/7.1) ── */
+@media (min-width: 1024px) {
+    .project-story-view {
+        height: auto !important;
+        max-height: none !important;
+        min-height: 0 !important;
+        aspect-ratio: 16 / 7.1;
+    }
+}
+
+/* ── xs / sm: story-view height matches the collapsed thumbnail ── */
+@media (max-width: 640px) {
+    .project-story-view {
+        /* mirrors the collapsed thumbnail aspect-ratio: 16/9.2 */
+        height: clamp(180px, calc(100vw * 9.2 / 16), 240px) !important;
+        max-height: 240px !important;
+        min-height: 180px !important;
+    }
+
+    /* Lead panel: full-width minus a small peek so users know to swipe */
+    .project-story-panel--lead {
+        flex: 0 0 calc(100% - 56px);
+    }
+
+    /* Details panel: narrower to fit the shorter view */
+    .project-story-panel--details {
+        flex: 0 0 calc(72% - 28px);
+        min-width: 200px;
+        padding: 1.25rem 1.1rem 1.25rem 1rem;
+    }
+
+    .project-story-copy__title {
+        font-size: clamp(1rem, 3.8vw, 1.3rem);
+        margin: 0 0 0.8rem;
+        padding-bottom: 0.75rem;
+    }
+    .project-story-copy__fields { gap: 0.75rem; }
+}
+
 /* ═══════════════════════════════════════════════════════
    SCROLL FAB
 ═══════════════════════════════════════════════════════ */
@@ -358,6 +399,56 @@
 }
 .portfolio-fab__item:hover { background: rgba(255,138,5,0.09); }
 .portfolio-fab__item.is-active { color: #ff8a05; font-weight: 600; }
+
+/* ═══════════════════════════════════════════════════════
+   LEAD MEDIA LIGHTBOX
+═══════════════════════════════════════════════════════ */
+.lead-lightbox {
+    position: fixed; inset: 0; z-index: 9000;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.28s ease;
+}
+.lead-lightbox.is-open { opacity: 1; pointer-events: auto; }
+.lead-lightbox__backdrop {
+    position: absolute; inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    cursor: zoom-out;
+}
+.lead-lightbox__close {
+    position: absolute; top: 1.25rem; right: 1.25rem; z-index: 1;
+    width: 2.75rem; height: 2.75rem;
+    background: rgba(255, 255, 255, 0.13); border: none; border-radius: 50%;
+    color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background 0.16s;
+}
+.lead-lightbox__close:hover { background: rgba(255, 255, 255, 0.24); }
+.lead-lightbox__close svg { width: 18px; height: 18px; }
+.lead-lightbox__content {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    transform: scale(0.94);
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.lead-lightbox.is-open .lead-lightbox__content { transform: scale(1); }
+.lead-lightbox__content img,
+.lead-lightbox__content video {
+    max-width: 90vw; max-height: 88vh;
+    width: auto; height: auto;
+    border-radius: 0.5rem;
+    object-fit: contain;
+    display: block;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+}
+@media (min-width: 1024px) {
+    .lead-lightbox__content img,
+    .lead-lightbox__content video {
+        max-width: 96vw; max-height: 96vh;
+        width: 96vw; height: 96vh;
+        object-fit: contain;
+        border-radius: 0.35rem;
+    }
+}
 </style>
 
 <section
@@ -453,7 +544,7 @@
                                 <div
                                     class="project-story-fallback"
                                     x-show="!isExpanded('{{ $project['id'] }}')"
-                                    x-transition:leave="transition duration-280 ease-in"
+                                    x-transition:leave="transition duration-160 ease-in"
                                     x-transition:leave-start="opacity-100"
                                     x-transition:leave-end="opacity-0"
                                     aria-hidden="true"
@@ -541,6 +632,12 @@
                                 <div
                                     x-show="isExpanded('{{ $project['id'] }}')"
                                     style="overflow:hidden;"
+                                    x-transition:enter="transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                                    x-transition:enter-start="opacity-0 translate-y-3"
+                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                    x-transition:leave="transition-[opacity,transform] duration-300 ease-in"
+                                    x-transition:leave-start="opacity-100 translate-y-0"
+                                    x-transition:leave-end="opacity-0 translate-y-2"
                                 >
                                 <div
                                     class="project-story-view js-project-story-view"
@@ -632,6 +729,17 @@
                 @endforeach
             </div>
         </div>
+    </div>
+
+    {{-- LEAD MEDIA LIGHTBOX --}}
+    <div id="js-lead-lightbox" class="lead-lightbox" role="dialog" aria-modal="true" aria-label="Media preview">
+        <div class="lead-lightbox__backdrop" id="js-lead-lightbox-backdrop"></div>
+        <button class="lead-lightbox__close" id="js-lead-lightbox-close" type="button" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+        </button>
+        <div class="lead-lightbox__content" id="js-lead-lightbox-content"></div>
     </div>
 
     {{-- SCROLL FAB --}}
@@ -930,5 +1038,104 @@
             });
         }, 600);
     });
+}());
+</script>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   SMOOTH SCROLL INTO VIEW ON CARD EXPAND
+   When the story-view fade-in animation starts, scroll
+   the card smoothly into the viewport if needed.
+══════════════════════════════════════════════════════ */
+(function () {
+    'use strict';
+    document.addEventListener('animationstart', function (e) {
+        if (e.animationName !== 'storyFadeIn') return;
+        var card = e.target.closest && e.target.closest('.project-card');
+        if (!card) return;
+        requestAnimationFrame(function () {
+            var rect = card.getBoundingClientRect();
+            var viewH = window.innerHeight;
+            /* Only scroll if the card is not already mostly visible */
+            if (rect.top < 80 || rect.bottom > viewH - 40) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        });
+    });
+}());
+</script>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   LEAD MEDIA LIGHTBOX
+   Click on the lead panel → opens fullscreen lightbox.
+   Drag gestures are ignored (threshold check).
+══════════════════════════════════════════════════════ */
+(function () {
+    'use strict';
+
+    var lightbox = document.getElementById('js-lead-lightbox');
+    var backdrop = document.getElementById('js-lead-lightbox-backdrop');
+    var closeBtn = document.getElementById('js-lead-lightbox-close');
+    var content  = document.getElementById('js-lead-lightbox-content');
+    if (!lightbox || !backdrop || !closeBtn || !content) return;
+
+    /* Track mouse displacement to distinguish click from drag */
+    var _downX = 0;
+    var _downY = 0;
+    var _dragged = false;
+    var DRAG_THRESHOLD = 6;
+
+    document.addEventListener('mousedown', function (e) {
+        _downX = e.clientX;
+        _downY = e.clientY;
+        _dragged = false;
+    }, true);
+
+    document.addEventListener('mouseup', function (e) {
+        var dx = Math.abs(e.clientX - _downX);
+        var dy = Math.abs(e.clientY - _downY);
+        _dragged = Math.sqrt(dx * dx + dy * dy) > DRAG_THRESHOLD;
+    }, true);
+
+    /* Open lightbox */
+    function openLightbox(mediaEl) {
+        content.innerHTML = '';
+        var clone = mediaEl.cloneNode(true);
+        clone.removeAttribute('class');
+        clone.style.cssText = '';
+        content.appendChild(clone);
+        if (clone.tagName === 'VIDEO') {
+            clone.controls = true;
+            clone.autoplay = true;
+            clone.muted    = true;
+        }
+        lightbox.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    /* Close lightbox */
+    function closeLightbox() {
+        lightbox.classList.remove('is-open');
+        document.body.style.overflow = '';
+        setTimeout(function () { content.innerHTML = ''; }, 300);
+    }
+
+    closeBtn.addEventListener('click', closeLightbox);
+    backdrop.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
+    });
+
+    /* Capture-phase click on lead panel — stops propagation so card stays open */
+    document.addEventListener('click', function (e) {
+        if (lightbox.classList.contains('is-open')) return;
+        var panel = e.target.closest && e.target.closest('.project-story-panel--lead');
+        if (!panel) return;
+        if (_dragged) return; /* was a drag, not a click */
+        e.stopPropagation();
+        var mediaEl = panel.querySelector('img, video');
+        if (mediaEl) openLightbox(mediaEl);
+    }, true);
 }());
 </script>
