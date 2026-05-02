@@ -118,6 +118,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('about', AboutBackendController::class)->except(['destroy', 'show']);
     Route::resource('why', WhyController::class)->except(['destroy', 'show']);
+    Route::post('/category/reorder', [CategoryController::class, 'reorder'])->name('category.reorder');
+
 
     Route::resource('projects', ProjectBackendController::class)
         ->parameters(['projects' => 'project_backend'])

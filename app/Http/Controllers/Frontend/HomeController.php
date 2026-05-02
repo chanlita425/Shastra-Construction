@@ -22,7 +22,7 @@ final class HomeController extends Controller
 
         // --- Step 2: Fetch Projects / Portfolio from      DB ---
         $products = Product::with('category')->latest()->get();
-        $categories = Category::all();
+        $categories = Category::orderBy('order')->get();
 
         // Fetch Why Us items from dashboard and map to the existing services-card format
         $whyCards = Why::all()->take(4)->map(fn (Why $why): array => [

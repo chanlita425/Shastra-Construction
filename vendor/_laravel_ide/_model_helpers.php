@@ -709,6 +709,7 @@ namespace App\Models {
     /**
      * App\Models\Category
      *
+     * @property int $order
      * @property \Illuminate\Support\Carbon $updated_at
      * @property \Illuminate\Support\Carbon $created_at
      * @property string|null $slug
@@ -725,6 +726,7 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Category>|Category whereSlug($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Category>|Category whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Category>|Category whereUpdatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Category>|Category whereOrder($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Category>|Category newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Category>|Category newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Category>|Category query()

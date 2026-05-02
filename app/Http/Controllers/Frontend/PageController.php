@@ -18,8 +18,8 @@ final class PageController extends Controller
 {
     public function __invoke(string $page, SiteContentService $siteContentService): View
     {
-         $banners = Banner::all();
-         
+        $banners = Banner::all();
+        
         $site = $siteContentService->getSite();
         $pageConfig = $siteContentService->getPage($page);
 
@@ -117,7 +117,7 @@ final class PageController extends Controller
 
     private function buildPortfolioFromDb(): array
     {
-        $categories = Category::all();
+        $categories = Category::orderBy('order')->get();
         $products   = Product::with('category')->latest()->get();
 
         $tabs = $categories->pluck('name_en')->filter()->values()->all();

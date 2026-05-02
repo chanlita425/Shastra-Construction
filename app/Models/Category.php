@@ -18,6 +18,7 @@ class Category extends Model
         'name_km',
         'name_ch',
         'slug',
+        'order'
     ];
 
     protected static function booted()

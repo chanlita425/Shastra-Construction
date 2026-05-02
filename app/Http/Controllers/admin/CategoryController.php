@@ -13,7 +13,8 @@ class CategoryController extends Controller
 {
      public function index()
     {
-        $categories = Category::all(); // MySQL (main source)
+        // $categories = Category::all(); // MySQL (main source)
+        $categories = Category::orderBy('order')->get(); // MySQL (main source)
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -25,6 +26,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'order'          => 'nullable|integer',
             'name_en' => 'required|string|max:255',
             'name_km' => 'nullable|string|max:255',
             'name_ch' => 'nullable|string|max:255',
@@ -41,6 +43,7 @@ class CategoryController extends Controller
                 'name_km' => $validated['name_km'],
                 'name_ch' => $validated['name_ch'],
                 'slug'    => $slug,
+                'order'   => $validated['order'],
             ]);
 
             DB::commit();
@@ -64,6 +67,7 @@ class CategoryController extends Controller
     public function update(Request $request, string $id)
     {
         $validated = $request->validate([
+                'order'          => 'nullable|integer',
             'name_en' => 'required|string|max:255',
             'name_km' => 'nullable|string|max:255',
             'name_ch' => 'nullable|string|max:255',
@@ -81,6 +85,7 @@ class CategoryController extends Controller
                 'name_km' => $validated['name_km'],
                 'name_ch' => $validated['name_ch'],
                 'slug'    => $slug,
+                'order'   => $validated['order'],
             ]);
 
             DB::commit();
@@ -93,6 +98,17 @@ class CategoryController extends Controller
 
             return back()->with('error', 'We could not update the category. Please try again.');
         }
+    }
+
+      public function reorder(Request $request)
+    {
+        $newOrder = $request->newOrder;
+
+        foreach ($newOrder as $item) {
+            DB::table('categories')->where('id', $item['id'])->update(['order' => $item['order']]);
+        }
+
+        return response()->json(['success' => true]);
     }
 
     public function delete(string $id)
